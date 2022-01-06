@@ -1,0 +1,499 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage{amsmath,amsthm,amsfonts,amssymb,amscd}
+\usepackage{bbm}
+\usepackage{tikz-cd}
+\usepackage{mathrsfs}
+\usepackage{stmaryrd}
+\usepackage[hmargin={2  cm,1.5cm},
+top=2cm, marginpar=2cm
+]{geometry}
+\usepackage[portuguese]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\title{A Correspondência de Galois para Extensões Infinitas}
+\author{Pedro Vaz Pimenta}
+
+
+
+\newtheorem{mydef}{Definição}[section]
+\newtheorem{lem}[mydef]{Lema}
+\newtheorem{thrm}[mydef]{Teorema}
+\newtheorem{mthrm}[mydef]{Metateorema}
+\newtheorem{cor}[mydef]{Corolário}
+\newtheorem{prop}[mydef]{Proposição}
+\newtheorem{conj}[mydef]{Conjectura}
+\renewcommand{\theequation}{\arabic{chapter}.\arabic{section}.\arabic{equation}}
+\def\dem{\par\smallbreak\noindent {\textit{ Demonstração:}} \ }
+\def\eop{\hfill\rule{2.5mm}{2.5mm} \\ }
+
+\def\pausa{\par\smallbreak\noindent {\textbf{Pausa.}} \ }
+
+%
+%
+\theoremstyle{definition}
+\newtheorem{obs}[mydef]{Observação}
+\newtheorem{propris}[mydef]{Propriedades}
+\newtheorem{axi}[mydef]{Axioma}
+\newtheorem{ex}[mydef]{Exemplo}
+\newtheorem{exerc}[mydef]{Exercício}
+
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+    A Correspondência de Galois é um dos resultados mais importantes da Teoria de Corpos, ela estabelece uma relação entre corpos intermediários de uma extensão e subgrupos do grupo de automorfismos correspondente a ela. A bijeção entre o conjunto de tais corpos e o conjunto de subgrupos vale para extensões finitas de Galois, porém falha se pedirmos grau infinito. Este trabalho apresentará duas abordagens para criar uma restrição nos subgrupos de modo a tornar a correspondência válida, a primeira usa Topologia e a segunda utiliza ferramentas lógicas, mais especificamente Análise Nonstandard. Depois de apresentar as abordagens, será feita uma breve discussão sobre a relação entre elas.  
+\end{abstract}
+
+\section{Correspondência de Galois: A Versão finita e onde ela falha}
+
+Se $F/K$ é uma extensão algébrica de corpos normal e separável, dizemos que ela é de Galois e temos associado a ela o grupo $\text{Gal}(F/K)$ de automorfismos em $F$ que fixam $K$, chamado de Grupo de Galois da extensão. Notamos que, para definir este grupo, a extensão não precisa necessariamente ser de Galois e, neste caso, alguns autores chamam o grupo apenas de $\text{Aut}(F/K)$ ou $\text{Aut}_K(F)$, mas não mudaremos a notação. Podemos ainda definir $$ \mathcal{C}(F/K)=\{ U | U \text{ é um corpo intermediário de } F/K \}$$ e $$\mathcal{S}(G)=\{ H | H\leq G \}.$$ Com isto, podemos enunciar um dos resultados fundamentais da Teoria de Galois: O Teorema da Correspondência de Galois (versão finita)\footnote{A maioria dos autores colocam ainda mais detalhes e resultados extras envolvendo esta correspondência no enunciado principal, porém focaremos apenas nesta parte aqui exposta, que será relevante para a formulação da versão infinita.}, que é o seguinte: se $F/K$ é de Galois e $[F : K]=n\in \mathbb{N}$, então existe uma função 
+
+$$\begin{array}{rcl}
+   \Gamma: \mathcal{S}(\text{Gal}(F/K))  & \rightarrow & \mathcal{C}(F/K)  \\
+     H & \mapsto & F^H = \{ a\in F |(\forall \sigma\in H) \sigma (a)=a \} 
+\end{array}$$
+
+com inversa
+
+$$\begin{array}{rcl}
+   \Gamma^{-1}: \mathcal{C}(F/K)   & \rightarrow &  \mathcal{S}( \text{Gal}(F/K)) \\
+     U & \mapsto & \text{Gal}(F/U) 
+\end{array}$$
+
+sendo que:  \\
+
+(i) Se $U$ é um subcorpo intermediário de $F/K$, então $U/K$ é uma extensão normal se, e somente se, $ \text{Gal}(F/U)\triangleleft \text{Gal}(F/K) $. \\
+
+ Caso $[F : K]=\infty$, podemos substituir $\Gamma^{-1}$ por $\Theta$ e ainda temos que $\Gamma \circ \Theta = \text{Id}$, ou seja, a primeira é sobrejetiva e a segunda injetiva, além de que (i) ainda vale (isso será demonstrado posteriormente), porém a propriedade de bijeção não valerá mais: existirão muito mais subgrupos do grupo de Galois do que corpos intermediários. 
+
+Veremos a seguir um exemplo de como o resultado pode falhar: seja $p\in \mathbb{N}$ um primo e $\mathbb{F}_p$ o corpo com $p$ elementos, considere a extensão $\overline{\mathbb{F}_p}/\mathbb{F}_p$. Esta extensão é de Galois, uma vez que o fecho algébrico é automaticamente uma extensão normal e, além disso, tome $a\in\overline{\mathbb{F}_p}$, como  $$\overline{\mathbb{F}_p}=\bigcup_{n=1}^\infty \mathbb{F}_{p^n} \ \ ,$$ temos que existe $n$ tal que $a\in \mathbb{F}_{p^n}$. Além disso, temos que um elemento está em $\mathbb{F}_{p^n}$ se, e somente se, é raiz de $X^{p^n}-X$. Logo o polinômio minimal de $a$ divide $X^{p^n}-X$, como sabemos que este polinômio é separável, já que todas suas raízes não só são distintas como formam um corpo, o polinômio minimal de $a$, consequentemente, também será separável. Portanto a extensão é separável. Mais detalhes sobre esta demonstração, as quais não são foco do texto, podem ser encontradas em [1]. 
+
+Com isso, podemos olhar para o grupo $\text{Gal}(\overline{\mathbb{F}_p}/\mathbb{F}_p)$ sob o ponto de vista da correspondência, o qual contém automorfismos da forma 
+
+$$\begin{array}{rcl}
+  \varphi_p: \overline{\mathbb{F}_p}   & \longrightarrow &  \overline{\mathbb{F}_p} \\
+     a & \longmapsto & a^p. 
+\end{array}$$
+
+Notamos que os únicos elementos fixados por $\varphi_p$ são os de $\mathbb{F}_p$, logo $\overline{\mathbb{F}_p}^{\langle \varphi_p \rangle} = \mathbb{F}_p$, por outro lado, $ \mathbb{F}_p=\overline{\mathbb{F}_p}^{\text{Gal}(\overline{\mathbb{F}_p}/\mathbb{F}_p)}$, donde concluiríamos que $ \text{Gal}(\overline{\mathbb{F}_p}/\mathbb{F}_p)=\langle \varphi_p \rangle$ se $\Gamma$ fosse invertível, o que não ocorre. De fato, seja $f:\mathbb{N}_{>0}\rightarrow \mathbb{Z}$ tal que $$f(n)\equiv f(m) \mod m$$ se $m \ | \ n$ e, para todo $a\in \mathbb{Z}$, existe $n\in \mathbb{N}$, tal que $$f(n)\not\equiv a \mod n.$$ Com isso, seja $\psi_n=\varphi^{f(n)}|_{\mathbb{F}_{p^n}}\in \text{Gal}(\mathbb{F}_{p^n}/\mathbb{F}_p)$. Se $\mathbb{F}_{p^m} \subset \mathbb{F}_{p^n}$, então  $m \ | \ n$ e, portanto, temos: $$\psi_n|_{\mathbb{F}_{p^m}}=\varphi^{f(n)}|_{\mathbb{F}_{p^m}}=\varphi^{f(m)}|_{\mathbb{F}_{p^m}}=\psi_m.$$ Assim, definimos um automorfismo $\psi$ em $\overline{\mathbb{F}_p}$ tal que $\psi|_{\mathbb{F}_{p^n}}=\psi_n$. Suponha que existe um inteiro $a$ tal que $\psi=\varphi^a$, logo temos, para todo $n$ natural positivo, que $$\varphi^{a}|_{\mathbb{F}_{p^n}}=\varphi^{f(n)}|_{\mathbb{F}_{p^n}}$$ e, portanto, que $$f(n)\equiv a \mod n,$$ o que não pode ocorrer por construção. Logo $\text{Gal}(\overline{\mathbb{F}_p}/\mathbb{F}_p) \setminus \langle \varphi_p \rangle \neq \emptyset$ e disso concluímos que $\Gamma$ não é bijetora. Resta, portanto, verificar que uma função $f$ com as propriedades enunciadas realmente existe, para isso, podemos usar o Teorema Fundamental da Aritmética para escrever $n=k_n p^{r_n}$, sendo $k_n$ inteiro e $r_n$ natural, com $\text{mdc}(k_n,p)=1$, assim, pelo Lema de Bézout, existem inteiros $x_n$ e $y_n$ tais que $1=k_n x_n+p^{r_n} y_n$, assim, podemos tomar $f(n)=k_n x_n$ e temos o que queríamos.
+
+Ou seja, para termos um análogo do Teorema da Correspondência de Galois no caso da extensão de Galois ter grau infinito, o que vimos ser uma possibilidade, precisamos de alguma restrição na hora de escolher os subgrupos de Galois. Tal restrição poderá ser descrita de duas formas distintas, as quais dependem de qual abordagem utilizaremos, e que serão tratadas em seguida.
+
+\section{Grupos Topológicos e grupos profinitos}
+
+Primeiramente, temos que a tripla $(G, \cdot, \tau)$ é um grupo topológico se $(G, \cdot)$ é um grupo, $(G,\tau)$ um espaço topológico, $\cdot: G\times G \rightarrow G$ é uma função contínua, considerando $G\times G$ com a topologia produto, e $\ \ ^{-1}:G\rightarrow G$ é contínua. Neste caso, diremos que apenas $G$ é um grupo topológico para não carregar muito a notação. Temos, também, uma definição alternativa:
+
+\begin{prop}
+
+    Um grupo $G$ é topológico se, e somente se, a aplicação $(a,b)\mapsto a\cdot b^{-1}$ é contínua. 
+
+\end{prop}
+
+\dem Se $G$ é um grupo topológico, basta mostrar que a aplicação $f$ tal que $(a,b)\mapsto f(a,b)=(a,b^{-1})$ é contínua, uma vez que, se sim, a aplicação cuja continuidade que queremos verificar é nada mais que a composição entre duas contínuas: $f$ e o produto de $G$. De fato, basta considerar $A,B\subset G$ abertos, temos que $f^{-1}(A\times B)=A\times C$, sendo $C$ a pré-imagem de $B$ pela aplicação de inversão, a qual é contínua, logo $C$ é aberto e $A\times C$ é aberto, logo $f$ é contínua.
+
+Por outro lado, suponha que $(a,b)\mapsto a\cdot b^{-1}$ é contínua. A aplicação $(a,b)\mapsto (e,b)$ é contínua: se $A\times B$ é aberto em $G\times G$, então a pré-imagem por esta aplicação será $G\times B$, que é aberto. Também temos que $a \mapsto (a,a)$ é contínua: seja $A\times B$ aberto de $G\times G$, logo a pré-imagem deste aberto pela aplicação será $A\cap B$, o qual é aberto. Ou seja, a inversão é contínua, pois é a composição de aplicações contínuas: $a\mapsto (a,a) \mapsto (e,a) \mapsto e\cdot a^{-1}=a^{-1}$. Com isso, temos imediatamente que a aplicação $(a,b)\mapsto (a,b^{-1})$ é contínua, logo o produto também é contínuo, uma vez que pode ser escrito como composição de aplicações contínuas: $(a,b)\mapsto (a,b^{-1})\mapsto a\cdot (b^{-1})^{-1}=a\cdot b$. 
+
+\ \eop
+
+Também precisaremos da seguinte propriedade: 
+
+\begin{prop}
+
+    Se $G_i$, $i\in I$, são grupos topológicos, então o produto direto $\prod_{i\in I} G_i$ com a topologia produto é um grupo topológico. \\
+
+\end{prop}
+
+\dem Dados $a,b \in \prod_{i\in I} G_i$, a operação $$a\cdot b ^{-1}=(... , a_i , ...)\cdot (... , b_i , ...)=(... , a_i \cdot b_i^{-1} , ...)$$ é contínua, uma vez que $(a_i,b_i)\mapsto a_i \cdot b_i^{-1}$ é contínua para cada $i\in I$, ou seja, dado um aberto básico no produto, a pré-imagem dele por $a\cdot b ^{-1}$ em $(\prod_{i\in I} G_i)^2$ será também um aberto básico, afinal, nos índices em que temos $G_i$, a pré-imagem da função coordenada é o próprio $G_i$, onde não é, temos um aberto pela observação anterior. \eop
+
+Por fim, os grupos topológicos podem ser dados por um sistema fundamental de vizinhanças abertas da identidade, este fato decorre do seguinte: sabemos que topologias, em geral, podem ser dadas a partir de sistemas fundamentais de vizinhanças para cada ponto (que podem ser abertas, mas não precisam necessariamente ser), no caso de grupos topológicos, basta que esse sistema seja dado para a identidade, afinal, a partir dele, obtemos um sistema fundamental para o elemento $g\in G$ qualquer bastando transladar, ou seja, uma vizinhança $U$ da identidade pode ser transladada para $gU$ e passará a ser uma vizinhança de $g$. Notamos que esta vizinhança será aberta somente se ela contiver a identidade, ou seja, um sistema fundamental de vizinhanças formado por subgrupos será automaticamente um sistema fundamental de vizinhanças abertas. Mais detalhes podem ser encontrados em [2]. 
+
+Com isso, podemos começar com os ingredientes que nos possibilitarão definir os grupos profinitos: Seja $I$ um conjunto qualquer e $(\leq)\subset I\times I$ uma relação. Dizemos que $(I, \leq)$ é uma estrutura de ordem parcial, sendo que $I$ será um conjunto parcialmente ordenado e $\leq$ uma ordem parcial, se, dados $i,j,k \in I$, temos: \\
+    
+i) $i\leq i$.
+    
+ii) $i\leq j$ e $j\leq k$ implica $i\leq k$.
+    
+iii) $i\leq j$ e $j\leq i$ implica $i=j$. \\
+    
+Dizemos que esta ordem parcial é direcionada se, dados $i,j\in I$, temos: \\
+    
+(iv) existe $k$ tal que $i\leq k$ e $j\leq k$. \\
+
+Um sistema projetivo (ou inverso) de grupos topológicos sobre o conjunto $I$ parcialmente ordenado e direcionado é a coleção $\{G_i, \varphi_{ij}|i,j\in I\}$ (que simbolizaremos como $\{G_i, \varphi_{ij} , I\}$), sendo $G_i$ grupos topológicos, $\varphi_{ij}: G_i\rightarrow G_j$ homomorfismos contínuos definidos sempre que $j\leq i$ e tais que o diagrama
+    
+$$\begin{tikzcd}
+    G_i  \arrow{rr}{\varphi_{ik}} \arrow{rdd}[swap]{\varphi_{ij}} & & G_k \\
+    & & \\
+    & G_j \arrow{uur}[swap]{\varphi_{jk}} &
+\end{tikzcd}$$
+    
+comuta caso esteja definido, ou seja, se $k\leq j \leq i$. Definimos também $\varphi_{ii}=\text{Id}_{X_i}$. Se $Y$ é um grupo topológico e $\psi_i: Y \rightarrow G_i$ homomorfismos contínuos, dizemos que a família $\phi_i$ é compatível com $\{G_i, \varphi_{ij} , I\}$ se $\varphi_{ij}\circ \psi_i=\psi_j$ sempre que $j\leq i$. 
+
+Finalmente, dizemos que um grupo topológico $G$ é o limite projetivo (ou inverso) de $\{G_i, \varphi_{ij} , I\}$ se, junto com uma família $\varphi_i$ de homomorfismos contínuos compatíveis com $\{G_i, \varphi_{ij} , I\}$ a seguinte propriedade universal é satisfeita: Para qualquer grupo topológico $H$ com uma família $\psi_i$ de homomorfismos contínuos compatíveis com $\{G_i, \varphi_{ij} , I\}$ existe um único homomorfismo contínuo $\psi: H\rightarrow G$ que faz o seguinte diagrama comutar para cada $i\in I$.
+
+$$\begin{tikzcd}
+    H  \arrow[dashrightarrow]{rr}{\psi} \arrow{rrdd}[swap]{\psi_i} & & G \arrow{dd}{\varphi_{i}}\\
+    & & \\
+    & & G_i  
+\end{tikzcd}$$
+
+Geralmente simbolizamos $G$ por $\varprojlim G_i$. Para que esta definição faça sentido e não seja vazia, precisamos do seguinte: 
+
+\begin{thrm}
+
+    Seja $\{G_i, \varphi_{ij} , I\}$ um sistema projetivo. Então o limite projetivo $\varprojlim G_i$ existe e é único a menos de isomorfismo topológico. Em outras palavras, existe um grupo que satisfaz a propriedade universal para o limite projetivo de $\{G_i, \varphi_{ij} , I\}$ e quaisquer dois grupos topológicos que a satisfazem são isomorfos e esse isomorfismo também é um homeomorfismo.
+
+\end{thrm}
+
+\dem Para mostrar a existência, tome $G\subset \prod_{i\in I}G_i$ cujos elementos $(g_i)_{i\in I}$ satisfazem $\varphi_{ij}(g_i)=g_j$ se $j\leq i$ e defina $\varphi_i:G\rightarrow G_i$ como $\varphi_i=\pi_i|_G$, sendo $\pi_i:\prod_{i\in I}G_i\rightarrow G_i$ a $i$-ésima projeção canônica. Temos que $G$ é um subgrupo de $\prod_{i\in I}G_i$ e, portanto, é um subgrupo topológico com a topologia de subespaço, além disso, junto com a família $\varphi_i$, satisfaz a propriedade universal. 
+
+A demonstração de unicidade a menos de isomorfismo topológico é rotineira para propriedades universais: supondo $(G, \varphi_i)$ e $(H, \psi_i)$ satisfazendo a propriedade, podemos montar os seguintes diagramas para cada $i\in I$.
+
+$$\begin{tikzcd}
+    H  \arrow[dashrightarrow, bend left=15]{rr}{\psi} \arrow{rdd}[swap]{\psi_i} & & G \arrow[dashrightarrow, bend left=15]{ll}{\varphi} \arrow{ldd}{\varphi_{i}} \\
+    & & \\
+    & G_i &   
+\end{tikzcd}$$
+
+$$\begin{tikzcd}
+    H  \arrow[dashrightarrow, bend left=15]{rr}{\varphi \circ \psi} \arrow{rdd}[swap]{\psi_i} \arrow[dashrightarrow, bend right=15]{rr}[swap]{\text{Id}_{H}}  & & H \arrow{ldd}{\psi_{i}} \\
+    & & \\
+    & G_i &   
+\end{tikzcd} \begin{tikzcd}
+    G  \arrow[dashrightarrow, bend left=15]{rr}{\psi \circ \varphi} \arrow{rdd}[swap]{\varphi_i}  \arrow[dashrightarrow, bend right=15]{rr}[swap]{\text{Id}_{G}}  & & G \arrow{ldd}{\varphi_{i}} \\
+    & & \\
+    & G_i &   
+\end{tikzcd}$$
+
+Com os quais concluímos que $\varphi=\psi^{-1}$ e $G\cong H$. \eop
+
+Dizemos que uma relação de equivalência $R\subset G\times G$ é aberta se, dado $x\in G$, $xR\subset G$ é aberto, ou seja, a classe de equivalência é um conjunto aberto. A mesma definição se aplica para uma relação de equivalência fechada. Note que isto é o mesmo que pedir que, para que a relação seja aberta, $R$ seja um aberto (ou fechado) em $G\times G$. Note, ainda, que, se $R$ é aberta, então ela também é fechada, pois, neste caso, podemos escrever $xR$ como o complemento de uma união de abertos. Se um sistema projetivo de grupos topológicos é composto por grupos finitos (com a topologia discreta), dizemos que seu limite projetivo é um grupo profinito. Com isso, temos o seguinte teorema que caracteriza tais grupos apenas pela topologia:
+
+\begin{thrm}
+
+    Um grupo topológico $G$ é profinito se, e somente se, a topologia em $G$ é compacta, Hausdorff e admite uma base de abertos fechados ou, em outras palavras, o espaço é compacto, Hausdorff e totalmente desconexo. 
+
+\end{thrm}
+
+\dem Por um lado, se $G$ é profinito, então, pela construção dada na última demonstração, $G$ é um subgrupo topológico de $\prod_{i\in I} G_i$, logo é Hausdorff e totalmente desconexo, uma vez que tais propriedades são preservadas por produto arbitrário e subespaço, sendo que a topologia discreta dos grupos finitos $G_i$ é automaticamente Hausdorff e totalmente desconexa. Por fim, $G$ é compacto: o produto $\prod_{i\in I} G_i$ é compacto, já que cada $G_i$ é compacto; além disso $G$ é fechado, pois consiste no conjunto de pontos $g\in \prod_{i\in I} G_i$ tais que $\varphi_{ij}\circ\pi_{i}(g)=\pi_{j}(g)$, sendo que $\varphi_{ij}\circ\pi_{i}$ e $\pi_{j}$ são contínuas. Isto ocorre pelo fato de que o subconjunto do domínio no qual duas funções contínuas coincidem é fechado. Ou seja, $G$ é um subespaço fechado de um espaço compacto, logo é compacto. 
+
+Por outro lado, suponha que $G$ é um grupo topológico compacto, Hausdorff e totalmente desconexo. Seja $\mathscr{R}$ o conjunto de todas as relações de equivalência abertas de $G$ e seja $R$ uma dessas relações; note que o quociente $G/R$ (apenas como conjunto) é um espaço topológico finito e discreto, já que $G$ é compacto. Podemos notar ainda que $G/R$ é um grupo finito, uma vez que podemos operar $xR$ e $yR$ como $xyR$, como a topologia é discreta, esse grupo é automaticamente topológico. É possível também definir uma ordem direcionada $\leq$ em $\mathscr{R}$: dizemos que $R$ e $S$ em $\mathscr{R}$ estão relacionados como $R\leq S$ se $xS\subset xR$ para todo $x$ em $G$. Assim, dados $R\leq S$, podemos definir  $\varphi_{SR}: G/S \rightarrow G/R$ por $\varphi_{SR}(xS)=xR$, que será um homomorfismo de grupos topológicos e ainda fará com que $\{ G/R, \varphi_{RS} , \mathscr{R} \}$ seja um sistema projetivo e possua um limite inverso $G'= \varprojlim G/R$. Resta provar que $G'\cong G$, já que $G'$, nesta definição, é profinito.
+
+Seja o homomorfismo contínuo $\psi: G\rightarrow G'$ induzido pelas inclusões canônicas contínuas $\psi_R:G\rightarrow G/R$, cuja existência vem da propriedade universal do limite projetivo. Note que, como cada aplicação $\varphi_{R}:G'\rightarrow G/R$ é sobrejetora, então $\psi$ também é sobrejetora. Pala aplicação ser contínua, sobrejetora e $G$ ser compacto, basta, portanto, provar que a aplicação $\psi$ é injetora para que tenhamos um homeomorfismo (que também será isomorfismo de grupo). Sejam $x,y\in G$, então existe uma vizinhança $V$ aberta-fechada de $x$ que não contém $y$ (por Hausdorff e pelo fato do conjunto ser totalmente desconexo), assim, considere a relação de equivalência $R$ que contém exatamente duas classes $V$ e $G\setminus V$, logo $\psi_R(x)\neq \psi_R(y)$, portanto $\psi(x)\neq\psi(y)$. Isto termina a demonstração. \eop 
+
+\begin{obs} Eis uma forma alternativa de demonstrar a volta deste teorema, a qual será apenas apresentada sem grandes detalhes: Seja $G$ um grupo topológico compacto, Hausdorff e totalmente desconexo. Em particular, o grupo $G$ é localmente compacto e subgrupos abertos formam uma base $\mathscr{B}$ de vizinhanças bertas do ponto $1$. Seja $H\in \mathscr{B}$, temos que $[H : G]<\infty$, pois $G$ é compacto, logo, um conjugado $gHg^{-1}$ é finito e a intersecção de todos eles, que chamaremos de $V_H$, é um subgrupo normal e aberto de $G$. Logo a família $\mathscr{C}=\{V_H | H\in\mathscr{B}\}$ é uma base de vizinhanças do ponto $1$ que são subgrupos normais e abertos. Com isso, podemos olhar para a família de grupos $G/V_H$ como um sistema projetivo, uma vez que a relação $\subset$ em $\mathscr{C}$ é uma ordem parcial direcionada, bastando definir $\varphi_{V_H V_K}: G/V_H\rightarrow G/V_K$ como $gV_H\mapsto gV_K$. Por fim, temos que $G\cong \varprojlim G/V_H$.  \eop \end{obs} 
+
+Isto termina os resultados necessários sobre grupos topológicos e grupos profinitos. É bom observar que estas áreas (junto com a teoria de pro-estruturas em geral) são extremamente ricas e a teoria infinita de Galois é apenas uma das aplicações. Muito mais sobre estas áreas pode ser encontrado em [2], [3] e [4].
+
+
+\section{Correspondência de Galois: A Versão infinita (I)}
+
+Agora, podemos ver como as extensões de Galois e seus respectivos grupos se comportam diante desta teoria, para isto, temos o primeiro o seguinte: seja $F/K$ uma extensão de Galois e $$ \mathcal{C}_f (F/K)=\{ U | U \text{ é um corpo intermediário de } F/K \text{e } U/K \text{ é Galois e finita} \},$$ Temos que $$F=\bigcup \mathcal{C}_f (F/K).$$
+
+Como podemos caracterizar grupos topológicos através de vizinhanças da identidade, conforme comentado anteriormente e feito em mais detalhes em [2], definimos a topologia de Krull sobre $\text{Gal}(F/K)$ de forma que os subgrupos normais formam um sistema fundamental de vizinhanças abertas da identidade. Em particular, se a extensão é finita, esta topologia é simplesmente a topologia discreta, porém, claro, estamos interessados no caso da extensão ser infinita. Assim, temos:
+
+\begin{thrm}
+
+    O grupo $\text{\upshape Gal\itshape}(F/K)$ com a topologia de Krull é um grupo profinito. Além disso: $$\text{\upshape Gal\itshape}(F/K) \cong \varprojlim_{K_i \in \mathcal{C}_f (F/K)} \text{\upshape Gal\itshape}(K_i/K).$$
+
+\end{thrm}
+
+\dem A ordem direcionada nos $K_i \in \mathcal{C}_f (F/K)$ é a de subconjunto: As propriedades de ordem parcial são automaticamente satisfeitas, para verificar que ela é realmente direcionada, basta notar que, dados $K_i$ e $K_j$, existirá polinômios $f_i$ e $f_j$ para os quais $K_i$ e $K_j$ são corpos de decomposição, bastam portanto, tomar $K_l$ que será o corpo de decomposição de $f_i\cdot f_j$ e temos o que queríamos. Assim, podemos definir 
+
+$$\begin{array}{rcl}
+    \varphi_{ij}:\text{Gal}(K_i/K) & \longrightarrow & \text{Gal}(K_j/K) \\
+    \sigma & \longmapsto & \sigma|_{K_j} 
+\end{array}$$
+
+fazendo com que $\{\text{Gal}(K_j/K), \varphi_{i,j}\}$ seja um sistema projetivo de grupos finitos de Galois, cujo limite projetivo existe e sabemos que é um grupo profinito, o qual, para economizar na notação, chamaremos de $G$. Seja 
+
+$$\begin{array}{rcl}
+    \psi : \text{Gal}(F/K) & \longrightarrow & G \\
+    \sigma & \longmapsto & \sigma|_{K_j}, 
+\end{array}$$
+
+queremos provar que esta função é um isomorfismo de grupos topológicos. Primeiramente, esta aplicação é claramente um homomorfismo, além de que ela é contínua, uma vez que a aplicação composta $\psi_i: \text{Gal}(F/K) \rightarrow  \text{Gal}(K_i/K)$ é contínua para todo $K_i$. Esta aplicação também é injetora, afinal $$\ker (\psi)=\bigcap  \text{Gal}(K_i/K) = \{\text{Id}\}.$$ Ainda temos que ela é sobrejetiva: se $(... , \sigma_i , ... )\in G$, tome $\sigma:F\rightarrow F$ tal que $\sigma(k)=\sigma_i(k)$ se $k\in K_i$, logo $\sigma \in \text{Gal}(F/K)$ e $\psi(\sigma)=(... , \sigma_i , ... )$. Resta mostrar que $\psi$ é aberta, para isto, basta mostrar que a imagem de um elemento de um sistema fundamental de vizinhanças abertas da identidade tem imagem aberta, ou seja, basta verificar a imagem de elementos da forma $\text{Gal}(K_i/K)$, de fato eles são não só abertos como são básicos: $$\psi\left( \text{Gal}(K_i/K) \right)=G\cap\left( \left(\prod_{K_j\not\subset K_i} \text{Gal}(K_j/K) \right)\times \left( \prod_{K_j\subset K_i} \{1\}_j \right) \right).$$ 
+
+Ou seja,  $\text{Gal}(F/K)$ com a topologia de Krull é isomorfo (como grupo topológico) a um limite projetivo de grupos finitos, disso concluímos que se trata de um grupo profinito.   \eop
+
+Com isso, podemos finalmente demonstrar a correspondência de Galois geral: 
+
+\begin{thrm}
+
+    Seja $F/K$ uma extensão de Galois. Considere $\text{\upshape Gal\itshape}(F/K)$ munido da topologia de Krull e defina $\mathcal{S}^*(\text{\upshape Gal\itshape}(F/K))$ o conjunto de subgrupos de $\text{\upshape Gal\itshape}(F/K)$ que são fechados nesta topologia. Seja a função:
+    
+    $$\begin{array}{rcl}
+        \Phi: \mathcal{C}(F/K) & \longrightarrow & \mathcal{S}^*(\text{\upshape Gal\itshape}(F/K)) \\
+         L &\longmapsto & \{\sigma \in \text{\upshape Gal\itshape}(F/K) |\ \ \sigma|_{L}=\text{\upshape Id \itshape } \}.
+    \end{array}$$
+    Então esta função é uma bijeção com a seguinte inversa:
+    
+    $$\begin{array}{rcl}
+        \Phi^{-1}: \mathcal{S}^*(\text{\upshape Gal\itshape}(F/K)) & \longrightarrow & \mathcal{C}(F/K) \\
+         H &\longmapsto & F^H.
+    \end{array}$$
+    
+    sendo $F^H$ da mesma forma definida no começo do texto. Por fim, a extensão $L/K$ para $L\in  \mathcal{C}(F/K)$ é normal se, e somente se, $\Phi(L)\triangleleft \text{\upshape Gal\itshape}(F/K)$.
+
+\end{thrm}
+
+\dem Equanto ainda não temos certeza se $\Phi$ é inversível, vamos chamar a candidata a inversa de $\Psi$. Primeiramente é preciso verificar que $\Phi(L)$ é realmente fechado, pra isso, notamos que $\Phi(L)=\text{Gal}(F/L)$, pelo teorema anterior, $\Phi(L)$ munido da topologia de Krull (que coincide com a topologia de subespaço) é um espaço compacto, portanto, é fechado. Para verificar que há bijeção, comecemos com $\Psi \circ \Phi$: temos claramente que $\Psi \circ \Phi(L)=\Psi (\text{Gal}(F/L))\subset L$, assim, seja $x\in F$ e $x$ é fixado por todo automorfismo $\sigma \in \text{Gal}(F/L)$, então o polinômio minimal de $x$ sobre $L$ deve ter grau $1$, portanto $x\in L$. 
+
+Agora o caso $\Phi \circ \Psi$: seja $L=\Psi(H)$. Ora, temos novamente a inclusão $\Phi \circ \Psi(H)=\text{Gal}(F/L)\supset H$ de forma imediata, para a outra inclusão, basta mostrar que $H$ é denso, já que sabemos que ele é fechado. Seja então $N$ um corpo intermediário na extensão $F/L$ tal que $N/L$ é uma extensão de Galois finita e seja $\sigma \in \text{Gal}(F/L)$, como queremos mostrar que $H$ intercepta qualquer aberto básico, basta mostrar que intercepta abertos básicos que estão na vizinhança da identidade e são transladados por $\sigma$, assim, pela definição da topologia de Krull, basta mostrar que $\sigma\left(\text{Gal}(N/L)\right)\cap H\neq \emptyset$. O Teorema de Galois para extensões finitas garante que $$\{\sigma|_N \ \ |\ \  \sigma \in H\}=\text{Gal}(N/L),$$ logo existe algum $\sigma' \in H$ tal que $\sigma'|_N=\sigma|_N$, portanto $\sigma'\in \sigma(\text{Gal}(N/L))$, como queríamos. 
+
+Por fim, seja $L\in \mathcal{C}(F/K)$ uma extensão normal. Seja $\sigma \in \text{Gal}(F/L)$ e $\tau \in \text{Gal}(F/K)$. Temos que $\tau^{-1}\sigma \tau \in \text{Gal}(F/L)$, logo $\Phi(L)\triangleleft \text{\upshape Gal\itshape}(F/K)$, pois $\text{Gal}(F/L)=\Phi(L)$. Por outro lado, se $\Phi(L)\triangleleft \text{\upshape Gal\itshape}(F/K)$, então $\text{Gal}(F/L)\triangleleft \text{\upshape Gal\itshape}(F/K)$, logo, dado $\sigma \in \text{Gal}(F/K)$, temos que $\sigma(L)=L$, portanto, $L/K$ é uma extensão normal devido a uma caracterização de extensões normais por esta propriedade, mais detalhes em [1]. \eop
+
+Feito isto, que foi seguindo basicamente o roteiro apresentado em [3], apresentaremos uma abordagem alternativa e relativamente desconhecida sobre a teoria infinita de Galois usando análise nonstandard.
+
+\section{Ultra-produtos e Modelos Nonstandard}
+
+Os Teoremas de Löweinheim-Skolem (mais detalhes em [5]), resultados clássicos e bem básicos de lógica, afirmam que, se uma teoria de primeira ordem sobre uma linguagem enumerável possui um modelo infinito, então ela possui um modelo infinito de qualquer cardinalidade. Isso por si só já nos garante a existência do que podemos considerar como modelos nonstandard de várias teorias, basta elas serem de primeira ordem. Por exemplo, a teoria sobre os números naturais que é aquela dada pelos axiomas de Peano entra nisso: caso ela realmente seja consistente (o que, por algumas razões, não podemos ter total certeza), então ela possui não só o modelo padrão que usamos no nosso dia-a-dia e que possui tamanho enumerável, como possui modelos com muito mais elementos, podendo ser tão grande quanto queiramos, isso necessariamente implica que haverá números ``novos'' e que certamente serão ``infinitos'' (no sentido de ser maior do que qualquer número natural que normalmente concebemos), adiante demonstraremos isso de forma mais precisa. 
+
+Outro exemplo de aplicação disso é na reta real: apesar dos axiomas da reta real fornecerem um único modelo a menos de isomorfismo, tais axiomas incluem uma afirmação de segunda ordem (no caso, o axioma do supremo), se excluirmos ele e trabalharmos apenas na primeira ordem (o que até permite incluir formas mais fracas de completude), podemos usar Löweinheim-Skolem para garantir a existência de reais com novos elementos, os quais podem ser infinitos (no mesmo sentido anterior) ou infinitesimais (números que, quando não são negativos, são menores que qualquer real positivo; e não são o zero).
+
+A análise nonstandard estuda esse tipo de modelo em vários níveis, desde superficialmente e aplicando para a matemática mais básica e do dia-a-dia, como feito em [6], até propriedades bastante profundas envolvendo muitas vezes problemas em aberto sobre lógica e teoria de conjuntos. Justamente quando nos aprofundamos um pouco mais nesta área, notamos a necessidade de tais modelos apresentarem propriedades mais específicas, o que requer uma construção também mais específica, pois apenas Löweinheim-Skolem não dará mais conta. Uma dessas construções é a partir dos ultra-produtos, que permite propriedades que usaremos posteriormente. Mais detalhes sobre definições e resultados básicos sobre lógica que serão usados aqui podem ser encontrados em [5].
+
+Assim, primeiramente, definiremos um filtro num conjunto $X$ como um subconjunto $F$ de $\wp (X)$ que possui as seguintes propriedades: \\
+	
+	i) se $A,B\in F$ então $A\cap B\in F$,
+	
+	ii) Se $A\in F$ e $A\subset B$ então $B\in F$,
+	
+	iii) $\emptyset \notin F$. \\
+
+Um conjunto que satisfaz apenas (i) e (iii) é chamado de base para filtro, pois podemos gerar um filtro a partir de tal conjunto como sendo a intersecção de todos os filtros que o contém. Se um filtro for maximal, ou seja, não está contido em qualquer filtro que não seja ele mesmo, dizemos que ele é um ultra-filtro. 
+
+\begin{prop}
+	
+	O conjunto $\bf{u}\subset \wp(X)$ é um ultra-filtro se, e somente se, $A\in \bf{u}$ ou $X\setminus A \in \bf{u}$ pra todo $A\subset X$ não vazio.
+	
+\end{prop}
+
+\dem Suponha que o filtro $\bf{u}$ é subconjunto próprio de outro filtro $F$ e assuma que $A\in \bf{u}$ ou $X\setminus A \in \bf{u}$ pra todo $A\subset X$ não vazio, então existe $B \subset X$ não vazio tal que $B\in F$ e $X\setminus B\in G$, logo $\emptyset =B\cap (X\setminus B)\in G$, absurdo. Agora suponha que $\bf{u}$ é um filtro que não é subconjunto próprio de outro filtro e que existe $A\subset X$ não vazio tal que $A\notin \bf{u}$ e $X\setminus A \notin F$, com isso podemos definir um filtro gerado por $A$ e fazer uma união dele com $\bf{u}$ e ``fechar'' o conjunto resultante para que ele seja um filtro, porém isso resultaria num filtro que contém $\bf{u}$ diferente dele, o que contraria sua maximalidade. \eop
+
+\begin{prop}
+	
+	Todo filtro está contido num ultra-filtro. 
+	
+\end{prop}
+
+\dem Esta demonstração consiste em uma aplicação padrão do Lema de Zorn: Seja $F\subset \wp (X)$ um filtro e seja $A$ o conjunto de todos os filtros contendo $F$ parcialmente ordenado pela inclusão. Seja $K$ uma cadeia em $Z$, defina $K^*=\bigcup K$, tal conjunto é um filtro: \\
+
+i) se $A,B\in K^*$ então existem $F_1$ e $F_2$ filtros em $K$ tais que $A\in F_1$ e $B\in F_2$, suponha (sem perda de generalidade) que $F_1\subset F_2$, então $A,B\in F_2$, logo $A\cap B\in F_2$, portanto $A\cap B\in F_K^*$. \\
+
+ii) Suponha que  $A\in K^*$ e $A\subset B$, então $A\in F_1$ para algum filtro $F_1$ em $K$, então $B\in F_1$, portanto $B\in K^*$. \\
+
+iii) Se $\emptyset \in K^*$ então $\emptyset \in F_1$ para algum filtro $F_1$ em $K$, absurdo. \\
+
+Aplicando o Lema de Zorn, temos que $A$ possui um elemento maximal, que será o ultra-filtro desejado. \\ 
+
+\ \eop
+
+Agora definiremos o conceito de ultra-produto de modelos. Seja $\Lambda$ um conjunto de índices arbitrário (preferencialmente infinito, por razões que ficarão claras adiante) e $\bf{u}\subset \wp(\Lambda)$ um ultra-filtro. Sejam $L$ uma linguagem e $\{ \mathfrak{M}_i\}_{i\in \Lambda} $ uma família de estruturas compatíveis com a linguagem $L$ e com universos $\{ M_i\}_{i\in \Lambda} $ não vazios e interpretações $\{ \llbracket \cdot \rrbracket_i \}_{i\in \Lambda} $ sobre $\{0,1\}$. O ultra-produto de $\{ \mathfrak{M}_i\}_{i\in \Lambda} $ pelo filtro $\bf{u}$ , simbolizado por $\prod\mathfrak{M}_i /\bf{u} $, será a estrutura formada primeiramente pelo universo $\prod M_i /\bf{u} $ das seguintes classes de equivalência em $\prod M_i $: dizemos que as $\Lambda$-uplas $(..., a_i , ...)$ e $(..., b_i , ...)$ são equivalentes se, e somente se, $\{i:a_i = b_i \}\in \bf{u}$ (a verificação de que esta relação de fato é de equivalência é imediata). Frequentemente abusaremos da notação identificando um representante de classe com a própria classe. Além disso os nomes para os termos são definidos de maneira natural: constantes são formadas por classes representadas por constantes e, se $f$ é uma função de aridade n, e $t_1=(..., t_{1_i},...),...,t_n=(..., t_{n_i},...)$ representantes de classes para nomes, então $f_{t_1,...,t_n}$ será o nome mandado pra a classe de $(...,f_{t_{1_i},...,t_{n_i}},...)$, predicados são definidos de forma análoga. Agora é preciso definir como são feitas as interpretações neste modelo: $ \llbracket (... ,\mathscr{A}_i,...) \rrbracket=1$ se e somente se $\{i: \llbracket \mathscr{A}_i \rrbracket_i=1\}\in \bf{u}$ sendo $\mathscr{A}_i$ da forma $P_{t_{1_1},...,t_{n_i}}$ para algum predicado $P$.  Segue agora um resultado importantíssimo conhecido como Teorema de Łoś que justifica a toda esta construção:
+
+\begin{mthrm}
+	
+	Seja $\mathscr{A}$ uma fórmula fechada em $\textrm{\textbf{Fbf}}(\prod \mathfrak{M}_i/\bf{u})$\footnote{Este é o conjunto de todas as fórmulas bem formadas interpretadas pelo modelo.} então $ \llbracket \mathscr{A} \rrbracket=1$ se e somente se $\{i: \llbracket \mathscr{A}_i \rrbracket_i=1\}\in \bf{u}$.
+	
+\end{mthrm}
+
+\dem Para o caso atômico o teorema é verdadeiro por definição, restando fazer uma indução na complexidade de $\mathscr{A}$ mostrando a validade para $\neg$, $\vee$ e $\exists$. Primeiro consideramos uma fórmula da forma $\neg \mathscr{A}$, pela hipótese de indução, $ \llbracket \mathscr{A} \rrbracket=1$ se e somente se $\{i: \llbracket \mathscr{A}_i \rrbracket_i=1\}\in \bf{u}$, logo $\{i: \llbracket \neg \mathscr{A}_i \rrbracket_i=1\}=\{i: \llbracket \mathscr{A}_i \rrbracket_i=0\}$ é o complementar de  $\{i: \llbracket \mathscr{A}_i \rrbracket_i=1\}$, portanto não está em  $\bf{u}$, logo $ \llbracket \neg \mathscr{A} \rrbracket=0$, o outro lado da equivalência se deduz pela mesma razão. Supondo a hipótese de indução para $ \mathscr{A}$ e $ \mathscr{B}$, pra provar que a propriedade vale para $\mathscr{A} \vee \mathscr{B}$ basta notar que: $$\{i: \llbracket \mathscr{A}_i \vee \mathscr{B}_i \rrbracket_i=1\}=\{i: \llbracket \mathscr{A}_i \rrbracket_i + \llbracket \mathscr{B}_i \rrbracket_i=1\}=\{i: \llbracket \mathscr{A}_i \rrbracket_i =1\} \cup  \{ i: \llbracket \mathscr{B}_i \rrbracket_i=1\}.$$ Para mostrar a propriedade para $(\exists x)\mathscr{A}$ supomos que ela vale para $\mathscr{A}[y]$ para $y$ qualquer e notamos que: $$\{i: \llbracket (\exists x)\mathscr{A}_i \rrbracket_i=1\}= \{i:\sup \{ \llbracket \mathscr{A}_i[y_i] \rrbracket_i:y_i\in M_i\}=1\}=$$ $$=\bigcup_{y_i\in M_i} \{i: \llbracket \mathscr{A}_i[y_i] \rrbracket_i=1\},$$ Aplicando a hipótese de indução temos que isto equivale a $\sup \{ \llbracket \mathscr{A}[y] \rrbracket_i:y\in \prod M_i\}=1$, ou seja, $ \llbracket (\exists x)\mathscr{A}  \rrbracket = 1$. \eop
+
+Caso cada um dos modelos $\mathfrak{M}_i$ sejam iguais, dizemos que esta construção fornece um ultra-modelo (ou ultra-potência do modelo) pelo ultra-filtro $\bf{u}$. O Teorema de Łoś também pode ser entendido da seguinte maneira: Seja $\mathfrak{M}$ um modelo e $\bf{u}$ um ultra-filtro não-principal (ou seja, um ultra-filtro que não contém um conjunto finito) em $I$ tal que $\omega\subset I$, tomamos, assim, o ultra-produto $\prod \mathfrak{M} / \bf{u}$. Seja $\mathscr{A}$ uma fórmula na linguagem de $\mathfrak{M}$, podemos associar a ela um representante de classe $^*\mathscr{A}$ na linguagem de $\prod \mathfrak{M} / \bf{u}$ (que, a partir de agora, chamaremos apenas de $^*\mathfrak{M}$) em que $\mathscr{A}_i=\mathscr{A}$ se, e somente se, $i\in \bf{u}$, com isso, podemos enunciar o Princípio da Transferência, que é consequência imediata do Teorema de Łoś: 
+
+\begin{mthrm}
+	
+	Seja $\mathfrak{M}$ um modelo e $\mathscr{A}$ uma fórmula em sua linguagem, então $$ \llbracket\mathscr{A}  \rrbracket = 1 \text{ se, e somente se, }  \llbracket ^*\mathscr{A}  \rrbracket = 1.$$
+	
+\end{mthrm}
+
+Isso significa que fórmulas continuam valendo quando transferidas de um modelo para o outro. Tal resultado pode dar a impressão de que ir de $\mathfrak{M}$ para $^*\mathfrak{M}$ seria desnecessário ou redundante, ao menos levando em conta o ponto de vista sintático de uma teoria. Porém, vale notar que geralmente o universo da teoria ``cresce'' nesse processo e isso ficará mais claro logo mais. O ponto importante é o fato de que $\bf{u}$ deverá ser não-principal, afinal, caso ele fosse principal, isso significaria que elementos do produto seriam equivalentes se coincidissem num conjunto finito de índices (na verdade, bastaria um único elemento, o qual seria o gerador desse ultra-filtro), fazendo com que a construção gerasse um novo modelo isomorfo ao primeiro. A existência de tal ultra-filtro depende de \textbf{4.2}, bastando tomar o filtro dos elementos cofinitos e estendê-lo a um ultra-filtro (com isso a gente também conclui que os índices do produto devem ser de um conjunto infinito); este resultado não só depende de um princípio de escolha como o Lema de Zorn, como é independente de ZF e pode ser ele próprio um princípio de escolha (porém mais fraco, uma vez que não é equivalente ao axioma da escolha). Assim, para os efeitos do que será feito, apenas iremos supor que a escolha deste ultra-filtro é fixa na nossa construção.
+
+Agora, para sermos mais precisos e para que a demonstração da correspondência de Galois a seguir faça sentido, precisaremos de superestruturas, com as quais poderemos falar de maneira geral de modelos nonstandard que proverão propriedades que serão necessárias. 
+
+Uma superestrutura $V(X)$ sobre o conjunto $X$ que contém uma ``cópia'' de $\omega$ é definida da seguinte forma recursiva: $$V_0(X)=X;$$ $$V_n(X)=V_{n-1}(X)\cup \wp(V_{n-1}(X));$$ $$V(X)=\bigcup_{n\in \omega}V_n(X).$$ Sendo que elementos $x\in V(X)$ são de rank $0$ se $x\in X$ e rank $n\geq 1$ se $x\in V_n(X)\setminus V_{n-1}(X)$. Toda superestrutura possui uma linguagem $L_X$ correspondente, que é a da própria teoria dos conjuntos relativizadas a $V(X)$, cujas interpretações serão verdadeiras caso sejam satisfeitas. A ideia aqui é, a partir de teorias de primeira ordem, chegar em modelos específicos destas teorias e, a partir de tais modelos, chegar em suas superestruturas, desta forma, fórmulas da teoria poderão ser reinterpretadas na linguagem da superestrutura. Esta é uma forma mais concreta de se tratar a teoria de modelos. Eis um exemplo, para que fique um pouco mais claro: 
+
+Considere a linguagem dos corpos ordenados, esta linguagem tem como um dos modelos possíveis o modelo dos números reais $\mathfrak{R}$, assim, podemos olhar para a superestrutura $V(\mathbb{R})$, que será o universo do modelo $\mathfrak{R}$, e interpretar fórmulas nela. Por exemplo, o produto $\cdot$ (aqui como símbolo funcional) entre elementos de um corpo ordenado segue a seguinte propriedade: $$(\forall x) ((x\neq 0)\rightarrow (\exists y)(x\cdot y=1)).$$ Quando interpretamos esta fórmula em $\mathfrak{R}$, temos que ela é verdadeira pelo seguinte fato: o protudo, neste contexto, é uma relação em $P\in \mathbb{R}^2\times \mathbb{R}$ para o qual vale a fórmula $$(\forall x\in \mathbb{R})((x\neq 0)\rightarrow (\exists y\in \mathbb{R})(((x, y),1)\in P).$$
+
+Esta fórmula está escrita na linguagem da teoria de conjuntos e pode ser interpretada nela, porém, em particular, temos que ela também está escrita na linguagem $L_{\mathbb{R}}$, que é a linguagem de $V(\mathbb{R})$, que é interpretada pelo modelo, que pode ser visto como esta superestrutura. 
+
+Agora introduziremos uma forma mais abstrata do símbolo $^*$ que servirá para superestruturas: Dadas duas superestruturas $V(X)$ e $V(Y)$, o símbolo $^*$ será o da seguinte função injetora:  
+$$\begin{array}{rcl}
+     {^*}:V(X)&\longrightarrow & V(Y) \\
+     x& \longmapsto & {^*x}
+\end{array}$$
+
+e, com isso, definimos a transferência de uma fórmula $\mathscr{A}$ de $L_X$ por $^*$ para a mesma fórmula em $L_Y$ tal que toda constante $c$ que aparece na fórmula é trocada por $^{*}c$, a notação desta nova fórmula será $^{*}\mathscr{A}$. Com isto, dizemos que $^*$ é um monomorfismo de superestruturas se as seguintes condições são satisfeitas: \\
+
+i) $^*(\emptyset)=\emptyset$. 
+
+ii) $^*$ preserva o rank.  
+
+iii) se $x\in {^* V_n(X)}$, para $n\geq 1$ e $y\in x$, então $y\in {^* V_{n-1}(X)}$.  
+
+iv) (Princípio da transferência) se $\mathscr{A}$ é válida em $V(x)$, então  $^{*}\mathscr{A}$ é válida em $V(Y)$. \\
+
+Geralmente iremos chamar $Y$ de $^*X$. Voltando ao contexto dos ultra-produtos, notamos que $^*$ conforme definida anteriormente, pelo Teorema de Łoś, de fato nos fornece um monomorfismo de superestruturas $V(X)$ para $V(\prod_{i\in I} X / \bf{u}) =$ $V({^*X})$, sendo $\omega \subset I\subset X$ e $\bf{u}$ um ultra-filtro não principal de $I$. Uma demonstração mais técnica técnica deste resultado pode ser encontrada em [7], em que o resultado utilizado já é enunciado no contexto de superestruturas. 
+
+Com isso, podemos dar as definições finais: todas os elementos $x\in V(X)$ e elementos em $V({^*X})$ da forma $^*x$, para $x\in V(X)$, são chamados de standard, caso contrário, são nonstandard. Um conjunto de $V({^*X})$ é dito $^*$-finito (pronunciamos ``estrela-finito'', alguns autores também chamam de hiper-finito) se está no conjunto $$\bigcup_{n\in \omega}{^* \wp_f (V_n(X))}=\bigcup \{ {^* \wp_f(A)} | A\in V(X)\setminus X \},$$ sendo $\wp_f(A)$ o conjunto dos subconjuntos finitos de $A$. 
+
+\begin{obs}
+
+Um caso particular importante de conjunto $^*$-finito são os elementos de $^*\omega$ (chamados de hiper-naturais), os quais podem ser infinitos. A existência de tais conjuntos vem do seguinte fato: existe pelo menos um elemento $x$ de $^*\omega$ que é nonstandard(isto será demonstrado logo mais), logo este elemento deve ser maior do que todos os naturais standard, afinal, se existisse um standard maior, concluiríamos em particular que existe um standard que é sucessor $x$, porém isso implica que $x$ é standard ou menor que zero, só que não existe natural (e nem hiper-natural) menor que zero, absurdo. Ou seja, para todo $n\in \omega$ temos que $^*n<x$, o que faz com que o segmento inicial $\{{^*0},{^*1},{^*2},...,x\}=x+1$ tenha tamanho infinito, e, apesar disso, se trata de um conjunto $^*$-finito.
+
+Esta constatação poderia ser feita explicitamente, bastando considerar a classe representada pelo elemento $(0,1,2,3,...)$ do produto e notar que todo natural $n\in \omega$ pode ser representado pelo elemento $(n,n,n,n,...)$, e, com isso, notamos que $(n,n,n,n,...)<(0,1,2,3,...)$ para qualquer $n$, afinal, o conjunto de índices para os quais a desigualdade vale é sempre cofinito, logo pertence ao ultra-filtro não principal usado no ultra-produto.
+
+\ \eop
+\end{obs}
+
+Assim, definimos a seguinte propriedade para monomorfismos: seja $V(X)$ uma superestrutura e $^*$ um monomorfismo, então $V({^*X})$ é um alargamento se, para todo conjunto $A\in V(X)$, existe um conjunto $B\in {^*\wp_f(A)}$ tal que, dado $a\in A$, temos que $^*a\in B$. Em particular, pelo princípio da transferência, se $A$ é infinito, então existem elementos de $^*A$ que não estão em $B$. Com isso, podemos enunciar o seguinte: 
+
+\begin{mthrm}
+    
+        Se $V({^*X})$ é construído usando um ultra-produto por um ultra-filtro não principal de um conjunto de índices $J\subset X$, então esta superestrutura é um alargamento de $V(X)$.
+    
+\end{mthrm}
+
+\dem Seja $J\subset X$ o conjunto de índices e $\bf{u}$ um ultra-filtro não-principal neste conjunto. Seja $A$ um conjunto não vazio de $V(X)$ e $a_0\in A$ fixo. Defina $\gamma: J\rightarrow \wp_f(A)$ tal que $\gamma(a)=(a\cap A)\cup \{a_0\}$ para cada $a\in J$. Como $A\in V_m(X)$ para algum $m\in\omega$, existe $n\in \omega$ e o conjunto $U_0\in \bf{u}$ tal que $\gamma(a)$ tem rank $n$ para todo $a\in U_0$, assim, escolha $a_1\in U_0$ e troque $\gamma(a)$ por $\gamma(a_1)$ para $a\notin U_0$. Seja $B$ conjunto cujos elementos são representados na relação de equivalência por elementos da imagem de $\gamma$, com isso, temos que $B\in {^* \wp_f (A)}$. Seja $c\in A$, como o conjunto unitário $\{c\}$ é um subconjunto finito de $A$, temos que $\{x\in J | c\subset x\}\subset \bf{u}$, logo $c\in \gamma(a)$ para todo $a\in \{x\in J | c\subset x\}\cap U_0\in \bf{u}$, logo $^*c\in B$. \eop
+
+Este resultado, com a construção que fizemos inicialmente, nos permite concluir que existem monomorfismos que são alargamentos, o que será vital na demonstração da correspondência de Galois que será feita a seguir. 
+
+Por fim, seja $P$ uma relação qualquer. Dizemos que ela é concorrente (ou finitamente satisfazível) num conjunto $A$ contido em seu domínio se, para todo $n\in \omega$, cada conjunto finito $\{x_1,...,x_{n-1}\}\subset A$ é tal que existe $y$ na imagem de $P$ tal que $(x_i,y)\in P$ para todo $0\leq i < n$. A relação $P$ é concorrente se é concorrente em todo seu domínio. Com isso, finalmente, podemos enunciar o último resultado necessário:
+
+\begin{mthrm}
+    
+        Seja a superestrutura $V(X)$ e o monomorfismo $^*$, então são equivalentes: \\
+        
+        i) $V({^*X})$ é um alargamento de $V(X)$.
+        
+        ii) Dada qualquer relação concorrente $P\in V(X)$, existe um elemento $c$ na imagem de $P$ tal que $({^*a},c)\in {^*P}$ para todo $a$ no domínio de $P$.
+    
+\end{mthrm}
+
+\dem (i)$\Rightarrow$(ii): Seja $A$ o domínio de $P$ e seja $B\subset {^*A}$ um conjunto $^*$-finito contendo $^*a$ para todo $a\in A$, pela transferência da propriedade de $P$ ser concorrente, existe $c$ na imagem de $^*P$ tal que $(b,c)\in {^*P}$ para todo $b\in B$, em particular $({^*a},c)\in {^*P}$ para todo $a\in A$. 
+
+(ii)$\Rightarrow$(i): Seja $A\in V(X)$. Como $\subset$ é uma relação concorrente em $\wp_f(A)$, existe um conjunto $B$ $^*$-finito que contém a extensão de qualquer subconjunto standard finito de $A$, em particular, dado $a\in A$, temos que $^*\{a\}=\{{^*a}\}\subset B$, logo $^*a\in B$. \eop
+
+Por fim, dizemos que um elemento $x\in V({^*X})$ é interno se existe $y\in V(X)$ tal que $x\in {^*y}$; caso contrário, dizemos que o elemento é externo. Da mesma forma, dizemos que uma fórmula $L_{{^*X}}$ é standard se todas suas constantes são standard e ela é interna se todas suas constantes são internas. Uma aplicação do princípio da transferência nos permite concluir o seguinte: se $A$ é um conjunto interno e $\mathscr{A}(x)$ uma fórmula interna com uma variável livre $x$, então $B=\{a\in A | \mathscr{A}(a)\}$ é um conjunto interno. Isto termina a introdução necessária para demonstrarmos a Correspondência de Galois sob o ponto de vista da análise nonstandard. 
+
+\section{Correspondência de Galois: A Versão infinita (II)}
+
+Novamente temos uma extensão $F/K$ de Galois de grau infinito. Seja então $^*$ um monomorfismo de superestruturas contendo os corpos em questão que possui a propriedade do alargamento. Por razões práticas, podemos considerar $^*$ como sendo o mapa que leva uma superestrutura contendo $F$ ao seu ultra-produto por um ultra-filtro não principal, apesar de que não precisaremos invocar esta construção específica em nenhum momento, bastará apenas o fato de que temos um alargamento. 
+
+Assim podemos considerar $^*F$ e $^*K$. Em particular, temos não só que $^*K\subset {^*F}$ como $^*F/^*K$. Temos que o grupo $G=\text{Gal}(F/K)$ possui o grupo correspondente $^*G= \text{Gal}(^*F/^*K)$. Com isso, podemos definir a seguinte relação $R$: \\
+
+Vale $R(x,y)$ se, e somente se, $x$ e $y$ são extensões algébricas normais com grau finito de $K$ e estão conditas em $F$, além disso, $x\subset y$. \\
+
+Temos que esta relação é concorrente e, como vale a propriedade do alargamento, existe $F'\subset {^*F}$ subcorpo tal que $F'/{^*K}$, além disso temos que $K'\subset F'$ para todo subcorpo $K'\subset {^*F}$ que é uma extensão normal de grau finito de $K$; como a união destes corpos é $F$, temos que $F\subset F'$. Desta forma, podemos, pela definição de $R$, notar que $F'$ é uma extensão de grau $^*$-finito de ${^*F}$, ou seja: $[F':{^*F}]=n\in {^*\omega}$, sendo $n$ um hiper-natural infinito. Com isso, temos que existe um ``polinômio'' $f(x)$ com grau $n$ e coeficientes em ${^*K}$ que tem $F'$ como corpo de decomposição. Ou seja, tudo que normalmente pode ser dito sobre polinômios e corpos de decomposição pode ser dito sobre $f(x)$ e $F'$ com a interpretação apropriada em ${^*F}$. 
+
+Em particular, existirá o grupo de Galois $\text{Gal}(F'/{^*K})$ que consiste no grupo dos automorfismos \textit{internos} de $F'$ que fixam ${^*K}$. Com isso, é válida a correspondência ($^*$-finita) de Galois para subgrupos internos de $\text{Gal}(F'/{^*K})$ e corpos intermediários internos de $F'/{^*K}$. 
+
+Seja $\sigma \in \text{Gal}(F'/{^*K})$, temos que este elemento é a restrição de algum elemento de $\text{Gal}(^*F/^*K)$ por $F'$, além disso, como $F$ é a união de extensões normais de grau finito de $K$, temos que $\sigma(F) \subset F$ e $\sigma^{-1}(F)\subset F$, logo $\sigma(F)=F$, portanto a restrição $^\circ \sigma$ de $\sigma$ a $F$ é um automorfismo de $F$ que deixa $K$ fixo, logo $^\circ \sigma\in \text{Gal}(F/K)$ e a aplicação $\sigma \mapsto ^\circ \sigma$ é um homomorfismo de $\text{Gal}(F'/{^*K})$ para $\text{Gal}(F/K)$ cujo núcleo consiste nos elementos de $\text{Gal}(F'/{^*K})$ que deixam $F$ invariante.
+
+Desta forma, seja $L$ um corpo intermediário de $F/K$ e seja $H_L$ o subgrupo de $\text{Gal}(F'/{^*K})$ que corresponde a $^*L\cap F'$ na correspondência ($^*$-finita) de Galois e defina $$^\circ H_L = \{ \tau | (\exists \sigma \in H_L) \tau={^\circ}\sigma \}.$$ Como já observado, os elementos de $^\circ H_L$ são automorfismos de $F/K$, logo não só $^\circ H_L\subset \text{Gal}(F/K)$ como temos que $^\circ H_L\leq \text{Gal}(F/K)$. Com este maquinário, provaremos o primeiro resultado preliminar:
+
+\begin{lem}
+
+    Dentro do contexto que foi definido anteriormente, temos: \\
+    
+    i) O corpo $L$ é o subconjunto de $F$ que é invariante para elementos de $^\circ H_L$. \\
+    
+    ii) $^\circ H_L$ é o conjunto de automorfismos de $ \text{\upshape Gal\itshape}(F/K)$ que fixam $L$.
+
+\end{lem}
+
+\dem Para (i), temos que $L\subset {^*L}\cap F'$, e os elementos de $^*L\cap F'$ são invariantes sob automorfismos de $H_L$. Por outro lado, se $a\in F$ e $a\notin L$, então $a\notin {^*L}$ e, portanto, $a\notin {^*L}\cap F'$, portanto existe $\sigma \in H_L$ tal que $\sigma(a)\neq a$ e, portanto $^\circ \sigma (a)\neq a$.
+
+Para (ii), suponha que $\sigma \in \text{Gal}(F/K)$ fixa $L$, logo $^*\sigma$ fixa $^*L$, assim $^*\sigma|_{F'}$ deixa elementos de ${^*L}\cap F'$ invariantes, portanto $^*\sigma|_{F'}\in H_L$ e, além disso, $\sigma={^\circ ({^*\sigma|_{F'}})}\in {^\circ H_L}$, o que termina a demonstração. \eop 
+
+Com isto existe uma mapa $\Gamma$ entre subcorpos intermediários da extensão $F/K$ e subgrupos do grupo de Galois de $F/K$ dado por $L\mapsto {^\circ H_L}$. Este mapa é claramente injetor, logo, resta caracterizar os subgrupos que fazem parte da imagem dele e teremos um resultado de correspondência, restando apenas demosntrar a parte da normalidade. Para isto, resta deixar clara a notação $^\circ$: se $\sigma\in \text{Gal}(^*F/^*K)$, temos que $^\circ \sigma=\sigma|_{F}$ e, se $S\subset \text{Gal}(^*F/^*K)$ então $$^\circ S = \{ \tau | (\exists \sigma \in S) \tau = {^\circ \sigma} \},$$ assim temos a caracterização, que é a primeira parte do Teorema da Correspondência de Galois para extensões infinitas:
+
+\begin{thrm}
+
+    Um subgrupo $S\leq  \text{\upshape Gal\itshape}(F/K)$ está na imagem de $\Gamma$ se, e somente se $^\circ({^*S})=S$.
+
+\end{thrm}
+
+\dem Por um lado, notamos, primeiramente, que $S\subset {^\circ({^*S})}$, assim, basta considerar a outra inclusão na prova da primeira implicação. Suponha, portanto, que $S$ está na imagem de $\Gamma$, logo $S={^\circ H_L}$ para algum corpo intermediário $L$ da extensão $F/K$, logo $S$ é o conjunto dos $\sigma \in  \text{Gal}(F/K)$ tais que $L$ é invariante por $\sigma$, donde concluímos, pelo princípio da transferência, que $^*J$ é o conjunto de elementos $\sigma \in  \text{Gal}(^*F/^*K)$ que fixam $^*L$, logo todos os elementos de $L$ são invariantes por automorfismos de ${^\circ({^*S})}$, portanto ${^\circ({^*S})}\subset S$.
+
+Por outro lado, suponha que $^\circ({^*S})=S$. Considere $({^*S})_{F'}$ como o grupo de elementos de ${^*S}$ restritos a $F'$, com isso, temos que este conjunto é interno. Seja $M$ o subcorpo de $F'$ que corresponde a $({^*S})_{F'}$ pela versão $^*$ da Correspondência de Galois $^*$-finta. Ou seja, os elementos de $M$ são invariantes para elementos de $({^*S})_{F'}$, logo o mesmo vale para elementos de $L=M\cap F$, que serão invariantes para elementos de $^\circ ({^*S})_{F'}={^\circ({^*S})}=S$. Além disso, se $a\in F\setminus L$, então $a\in F'\setminus M$, logo $\sigma(a)\neq a$ para algum $\sigma \in ({^*S})_{F'}$, portanto $^\circ \sigma (a)\neq a$ para $^\circ \sigma \in {^\circ ({^*S})_{F'}}=S$. Portanto, $L$ consiste em todos os elementos de $F$ que são invariantes por elementos de $S$, com isso também concluímos que o mesmo vale para $^*L$ e $^*S$. Porém, isto mostra que $^*L\cap F'$ consiste em todos os elementos de $F'$ que são invariantes por automorfismos de $({^*S})_{F'}$, isso quer dizer que $^*L\cap F'=M$, logo, retornando na notação que estávamos usando, concluímos que $({^*S})_{F'}=H_L$ e $S={^\circ H_L}$, portanto $S$, de fato, está na imagem de $\Gamma$. \eop
+
+
+
+Com isso, podemos demonstrar a segunda parte do Teorema da Correspondência de Galois para extensões finitas:
+
+\begin{thrm}
+
+    Temos que $\Gamma(L)\triangleleft \text{\upshape Gal\itshape}(F/K)$ se, e somente se, $L/K$ é uma extensão normal.
+
+\end{thrm}
+
+\dem Primeiramente, se $L$ é uma extensão normal de $K$, então $^*L$ é uma extensão normal de $^*K$, portanto $^*L\cap F'$ é uma extensão normal de $^*K$ e, por outro lado, se $^*L\cap F'$ é uma extensão normal de $^*K$, então $L={^*L\cap F'}\cap F$ é normal sobre $K$. 
+
+Em segundo lugar, se $S \triangleleft \text{\upshape Gal\itshape}(F/K)$, então $^*S\triangleleft  \text{\upshape Gal\itshape}({^*F}/{^*K})$ e, portanto, $\sigma ({^*S}) \sigma^{-1}=S$ para todo $\sigma \in  \text{\upshape Gal\itshape}({^*F}/{^*K})$, logo $\sigma|_{F'} (({^*S})_{F'}) \sigma^{-1}|_{F'}  \subset ({^*S})_{F'}$, portanto $({^*S})_{F'}\triangleleft \text{\upshape Gal\itshape}(F'/{^*K})$. Temos que $S={^\circ(({^*S})_{F'})}$, logo $S$ é um subgrupo normal de $ \text{\upshape Gal\itshape}(F/K)$ se $({^*S})_{F'}$ é um subgrupo normal de $\text{\upshape Gal\itshape}({^*F}/{^*K})$. Ou seja, como $^\circ({^*S})=S$, temos $S\triangleleft \text{\upshape Gal\itshape}(F/K)$ se, e somente se, $({^*S})_{F'} \triangleleft \text{\upshape Gal\itshape}({^*F}/{^*K})$. 
+
+Agora podemos aplicar a afirmação (i) da Correspondência de Galois finita no contexto $^*$-finito, concluindo que: $S\triangleleft \text{\upshape Gal\itshape}(F/K)$ se, e somente se, $({^*S})_{F'} \triangleleft \text{\upshape Gal\itshape}({^*F}/{^*K})$, o que, por sua vez, ocorre se, e somente se, o corpo correspondente $^*L\cap F'$ é uma extensão normal de $^*K$, o que ocorre se, e somente se, $L$ é uma extensão normal de $K$. \eop       
+
+
+Isto termina a Correspondência de Galois para extensões infinitas usando análise nonstandard, para isto foi seguido o conteúdo apresentado em [8]. Tal abordagem também provê, da mesma forma que a topologia de Krull, uma restrição nos subgrupos de $\text{Gal}(F/K)$ de forma que a correspondência possa valer igual no teorema clássico. Notamos que este resultado, como deveria ser, também vale para o caso finito, já que ${^*S}=S$ para qualquer conjunto finito e, consequentemente, $^\circ({S})=S$.
+
+\section{Considerações finais}
+
+Esta última abordagem tem a desvantagem de ser bem menos acessível, principalmente a quem não tem tanta familiaridade com lógica, enquanto a primeira é melhor neste sentido, já que topologia é uma área fundamental bem mais amplamente conhecida, sendo até disciplina obrigatória em muitos cursos de graduação. Porém, a abordagem nonstandard acaba sendo relativamente mais simples (depois de se conhecer seus fundamentos) e ainda pode ser colocada de maneira intuitiva: quando temos uma extensão $F/K$ de grau infinito, podemos olhar esta extensão no contexto nonstandard e, com algumas restrições, obtemos uma extensão de grau que, apesar de ainda ser infinito sob o ponto de vista concreto, passa a ser $^*$-finito; ou seja, é como se o modelo nonstandard ``enxergasse'' esse grau como um número finito, o que possibilita usar o princípio da transferência e utilizar o resultado clássico para obter uma correspondência nova e, feito isso, achamos uma forma de voltar ao contexto standard.
+
+A ligação entre as duas abordagens, conforme apresentado em [8], se dá pela seguinte forma: suponha que estamos novamente no contexto anterior:
+
+\begin{prop}
+    
+    Se $S={^\circ({^*S})}$ e $\sigma \in \text{\upshape Gal\itshape}({F}/{K})\setminus S$, então existem $a_1,...,a_n\in F$ tais que todo automorfismo $\sigma' \in \text{\upshape Gal\itshape}({F}/{K})$ que coincide com $\sigma$ em $a_i$, $i=1,...,n$, ou seja, $\sigma(a_i)=\sigma'(a_i)$, é tal que $\sigma'\notin S$. 
+    
+\end{prop}
+
+\dem Seja $\sigma \in \text{Gal}(F/K)\setminus S$, suponha por absurdo que, para todos $a_1,...,a_n\in F$, existe $\sigma'\in \text{Gal}(F/K)$ que coincide com $\sigma$ nestes elementos sendo $\sigma'\in S$. Então a relação $R(x,y)$ definida por ``$x\in F$ e $y\in S$ e $\sigma(x)=y(x)$'' é concorrente. Como estamos num alargamento, existe $\tau \in {^*S}$ tal que $\sigma(a)=\tau(a)$ para todo $a\in F$, porém teríamos que $\sigma={^\circ \tau}\in {^\circ({^*S})} = S$, o que é uma contradição. \eop
+
+Também temos a recíproca:
+
+\begin{prop}
+    
+    Seja $S\leq  \text{\upshape Gal\itshape}({F}/{K})$. Suponha que, para todo $\sigma \in  \text{\upshape Gal\itshape}({F}/{K}) \setminus S$, existe um conjunto finito $\{a_1,..,a_n\}\subset F$ tal que, se $\sigma'\in \text{\upshape Gal\itshape}({F}/{K})$ e $\sigma$ coincidem em $\{a_1,..,a_n\}$, então $\sigma'\in \text{\upshape Gal\itshape}({F}/{K}) \setminus S$. Então $S={^\circ({^*S})}$.
+    
+\end{prop}
+
+\dem Suponha que $\sigma \in \text{Gal}(F/K)\setminus S$ e $\sigma = {^\circ \tau}$ para algum $\tau\in {^*S}$. Então $\sigma(a)=\tau(a)$ para todo $a\in F$, em particular $\sigma$ coincide com $\tau$ em qualquer subconjunto finito de $F$, assim, aplicando as condições da proposição para $^*F$, temos que $\tau \in \text{Gal}({^*F}/{^*K})\setminus {^*S}$, contradição. \eop
+
+Como já vimos, a topologia de Krull é definida de tal forma que o sistema fundamental de vizinhanças abertas da identidade em $\text{Gal}(F/K)$ vem dos subgrupos que deixam extensões finitas $L/K$ invariantes. Disso, podemos concluir que $S={^\circ({^*S})}$ se, e somente se, $S$ é fechado na topologia de Krull. Na verdade, essa conexão é um pouco mais profunda, apresentada no último resultado deste trabalho:
+
+\begin{prop}
+    
+    Todo grupo profinito é a imagem de um grupo $^*$-finito por um homomorfismo de grupos.
+    
+\end{prop}
+
+\dem Seja $G$ um grupo profinito dado pelo limite projetivo do sistema $\{ G_i , \varphi _{ij} , I \}$. Caso $I$ e, consequentemente $G$, seja finito, não há nada a fazer, então, supomos que $I$ seja um conjunto infinito de índices, fazendo com que possamos estudar todos os grupos do ponto de vista de um alargamento, o qual fará com que exista um elemento $z\in {^*I}$ que majora todos os elementos de $I$, com isso temos que $G_z$ é um grupo $^*$-finito, já que $G_i$ é finito para $i\in I$. Para concluir o resultado, basta definir um homomorfismo sobrejetor $\psi:G_z\rightarrow G$, para isto, seja $a\in G_z$, então: $$\psi(a)=(... , \varphi_{zi}(a) , ...)\in G,$$ sendo que $\varphi_{zi}(a)$ está na posição $i$, com isto temos um homomorfismo bem definido, uma vez que $\varphi_{zi}$ está definida para todo $i\in I$ e todas estas funções são homomorfismos, fazendo com que $\psi$ seja um homomorfismo. Esta aplicação também é uma sobrejeção: seja $g=(... , g_i , ...)\in G$, sendo $g_i\in G_I$ na posição $i$, e $^*g\in {^*G}$: temos que $^*g=(... , {^*g_i} , ... , g_z , ...)$ com ${^*g_i}=g_i\in {^*G_i}=G_i$ se $i\in I$ e $g_z\in G_z$ tal que $g_z$ está na posição $z$ de $^*g$, logo $\psi(g_z)=(... , g_i , ...)\in G$ pela definição de limite projetivo, como a escolha de $g\in G$ foi arbitrária, temos o que queríamos. \eop 
+
+Notamos que em nenhum momento falamos sobre topologia nesta demonstração, isto ocorre pelo fato de que afirmações envolvendo topologia geralmente não são transferíveis pelo princípio da transferência, uma vez que geralmente são fórmulas de ordem superior (isto é, não são fórmulas de primeira ordem). Com isso, podemos dizer, intuitivamente, que as ferramentas nonstandard conseguem resolver ``problemas'' que, normalmente, são resolvidos pela topologia sem usá-la. Isso é especialmente verdade no contexto do cálculo diferencial e integral nos números hiper-reais (conforme exposto em [6] e discutido com mais profundidade em [7]): propriedades sobre limites, derivadas, etc, são demonstradas para funções standard de $^*\mathbb{R}$ e, consequentemente, para funções em $\mathbb{R}$ sem precisar de argumentos topológicos (que, neste contexto, são os epsilons e deltas, os quais são ``jogados para debaixo do tapete'' pela abordagem infinitesimal).
+
+\section{Referências}
+
+\ 
+
+\textbf{[1]} Lang, Serge. \textit{Algebra}. 3rd ed., vol. 1, Springer-Verlag New York Inc., 2012. \\ 
+
+\textbf{[2]} Bourbaki, Nicolas. \textit{General Topology}. Springer, 1998. \\
+
+\textbf{[3]} Ribes, Luis; Zalesskii, Pavel. \textit{Profinite Groups}. 2nd ed., Springer, 2000.\\
+
+\textbf{[4]} Szamuely, Tomás. \textit{Galois Groups and Fundamental Groups} Cambridge University Press, 2012. \\
+
+\textbf{[5]} Tourlakis, George J. \textit{Lectures in Logic and Set Theory}. Vol. 1. Cambridge, UK: Cambridge UP, 2003.  \\
+
+\textbf{[6]} Keisler, H. Jerome. \textit{Elementary Calculus: an Infinitesimal Approach}. Dover Publications, 2012. \\
+
+\textbf{[7]} Loeb, Peter A.; Wolff, Manfred P.H. \textit{Nonstandard Analysis for the Working Mathematician}. 2nd ed., Springer, 2016. \\
+
+\textbf{[8]} Robinson, Abraham; Keisler, H. Jerome. \textit{Selected Papers of Abraham Robinson}. Vol. 2, Yale University Press, 1979.\\
+
+
+\end{document}
